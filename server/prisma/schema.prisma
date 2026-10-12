@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Choice {
+  YES
+  NO
+}
+
+model Poll {
+  id        Int      @id @default(autoincrement())
+  question  String   @db.VarChar(200)
+  createdAt DateTime @default(now())
+  votes     Vote[]
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  pollId    Int
+  sessionId String   @db.VarChar(64)
+  choice    Choice
+  createdAt DateTime @default(now())
+  poll      Poll     @relation(fields: [pollId], references: [id], onDelete: Cascade)
+
+  // The database itself refuses a second vote from the same session on the same poll.
+  @@unique([pollId, sessionId])
+}
