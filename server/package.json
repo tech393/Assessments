@@ -11,7 +11,8 @@
     "start": "node --env-file=.env src/index.js",
     "test": "node --env-file=.env --test --test-concurrency=1",
     "db:migrate": "prisma migrate deploy",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
